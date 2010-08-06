@@ -71,6 +71,8 @@ init([TableFileName]) ->
 %%                                   {stop, Reason, State}
 %% @end
 %%--------------------------------------------------------------------
+handle_call(port, _From, State)->
+    {reply, {ok, State#state.port}, State};
 handle_call(_Request, _From, State) ->
     Reply = ok,
     {reply, Reply, State}.

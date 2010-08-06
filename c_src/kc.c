@@ -29,11 +29,16 @@ DRIVER_INIT( DYLIB_NAME ) /* must match name in driver_entry */
 #include <stdio.h>
 
 static ErlDrvData kc_drv_start(ErlDrvPort port, char *buff){
+  KCDB * kcdb = kcdbnew();
+  kcdbopen(kcdb, "test.kch", KCOWRITER|KCOCREATE);
   puts(__func__);
-  return NULL; //(ErlDrvData)map;
+  return (ErlDrvData)kcdb;
 }
 
 static void kc_drv_stop(ErlDrvData handle){
+  KCDB * kcdb = (KCDB*)handle;
+  kcdbclose(kcdb);
+  kcdbdel(kcdb);
   puts(__func__);
   return;
 }
