@@ -2,7 +2,6 @@
 
 static ErlDrvData kc_drv_start(ErlDrvPort port, char *buff);
 static void kc_drv_stop(ErlDrvData handle);
-
 // inspired by http://rakuto.blogspot.com/2008/07/manipulate-erlang-binary-term-format-in.html
 static int kc_drv_control(ErlDrvData handle, unsigned int command, 
 			  char * buf, int len, char ** rbuf, int rlen );
@@ -30,10 +29,17 @@ DRIVER_INIT( DYLIB_NAME ) /* must match name in driver_entry */
 #include <stdio.h>
 
 static ErlDrvData kc_drv_start(ErlDrvPort port, char *buff){
-  printf("hogehoge\n");
+  puts(__func__);
   return NULL; //(ErlDrvData)map;
 }
 
 static void kc_drv_stop(ErlDrvData handle){
+  puts(__func__);
   return;
+}
+
+static int kc_drv_control(ErlDrvData handle, unsigned int command, 
+			  char * buf, int len, char ** rbuf, int rlen ){
+  puts(__func__);
+  return 0;
 }

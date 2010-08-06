@@ -35,14 +35,15 @@
 %% @end
 %%--------------------------------------------------------------------
 start(_StartType, _StartArgs) ->
-    LibPath = code:priv_dir(?MODULE)++ "/lib",
-%    io:format("~p ~p: ~p~n", [?FILE, ?LINE, LibPath]),
+%    LibPath = code:priv_dir(?MODULE)++ "/lib",
+    LibPath = filename:join([ filename:absname(""), "priv", "lib" ]),
     case erl_ddll:try_load(LibPath, ?DYLIB_NAME, []) of
-	{ok, _Status} -> 
+	{ok, _Status} ->
+%	    io:format("~p ~p: ~p~n", [?FILE, ?LINE, LibPath]),
 	    kc_sup:start_link();
 	{error, Reason}->
-	    io:format("you have to set exactly where libyatce.so exists: ~p , ~p~n",
-		      [ erl_ddll:format_error(Reason), LibPath ]),
+	    io:format("you have to set exactly where ~s.so exists: ~p , ~p~n",
+		      [ ?DYLIB_NAME, erl_ddll:format_error(Reason), LibPath ]),
 	    {error, Reason};
 	Other ->
 	    io:format("~p~n", [Other]),

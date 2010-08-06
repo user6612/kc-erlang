@@ -1,5 +1,5 @@
-//#ifndef KC_C
-//#define KC_C
+#ifndef KC_C
+#define KC_C
 #include <erl_driver.h>
 #include <kclangc.h>
 

@@ -54,8 +54,6 @@ init([]) ->
     MaxRestarts = 1000,
     MaxSecondsBetweenRestarts = 3600,
 
-    SupFlags = {RestartStrategy, MaxRestarts, MaxSecondsBetweenRestarts},
-
     Restart = temporary,
     Shutdown = 2000,
     Type = worker,
@@ -63,7 +61,7 @@ init([]) ->
     AChild = {undefined, {kc_srv, start_link, []},
 	      Restart, Shutdown, Type, [kc_srv]},
 
-    {ok, {SupFlags, [AChild]}}.
+    {ok, {{RestartStrategy, MaxRestarts, MaxSecondsBetweenRestarts}, [AChild]}}.
 
 %%%===================================================================
 %%% Internal functions

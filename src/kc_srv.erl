@@ -11,15 +11,17 @@
 -behaviour(gen_server).
 
 %% API
--export([start_link/0]).
+-export([start_link/1]).
 
 %% gen_server callbacks
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2,
 	 terminate/2, code_change/3]).
 
+-include("kc.hrl").
 -define(SERVER, ?MODULE). 
 
--record(state, {}).
+-record(state, {filename :: filename:filename(),
+	        port :: port() }).
 
 %%%===================================================================
 %%% API
@@ -32,8 +34,8 @@
 %% @spec start_link() -> {ok, Pid} | ignore | {error, Error}
 %% @end
 %%--------------------------------------------------------------------
-start_link() ->
-    gen_server:start_link({local, ?SERVER}, ?MODULE, [], []).
+start_link(TableFileName) ->
+    gen_server:start_link(?MODULE, [TableFileName], []).
 
 %%%===================================================================
 %%% gen_server callbacks
@@ -50,8 +52,10 @@ start_link() ->
 %%                     {stop, Reason}
 %% @end
 %%--------------------------------------------------------------------
-init([]) ->
-    {ok, #state{}}.
+init([TableFileName]) ->
+    erlang:display(TableFileName),
+    Port = open_port({spawn_driver, ?DYLIB_NAME}, [binary]),
+    {ok, #state{filename=TableFileName, port=Port}}.
 
 %%--------------------------------------------------------------------
 %% @private
@@ -81,6 +85,9 @@ handle_call(_Request, _From, State) ->
 %%                                  {stop, Reason, State}
 %% @end
 %%--------------------------------------------------------------------
+handle_cast(stop, State)->
+    State#state.port ! {self(), close},
+    {stop, normal, State};
 handle_cast(_Msg, State) ->
     {noreply, State}.
 
