@@ -33,4 +33,4 @@ ct: $(beams) $(apps)
 clean:
     rm -rf $(beams)
 
-.SUBDIRS: src
+.SUBDIRS: src c_src
