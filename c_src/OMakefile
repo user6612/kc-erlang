@@ -71,6 +71,8 @@ INCLUDES += $(ERL_DRIVER_H) /opt/local/kc/include
 
 LIBFILES[] =
      kc
+     kc_util
+
 
 LIB = libkcerlang
 
