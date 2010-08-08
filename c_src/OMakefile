@@ -46,7 +46,7 @@ EI_HOME = $(shell erl -noshell -eval 'io:format("~s~n", [code:lib_dir(erl_interf
 ERL_DRIVER_H = $(shell erl -noshell -eval 'io:format("~s~n", [filename:absname("usr/include", code:root_dir())]).' -s init stop)
 
 #CFLAGS += -bundle -undefined suppress -flat_namespace
-CFLAGS += -fPIC -undefined suppress -flat_namespace
+CFLAGS += -g -Wall -fPIC -undefined suppress -flat_namespace
 # ASFLAGS +=
 LDFLAGS += -L$(EI_HOME)/lib -lei_st -L/opt/local/kc/lib -lkyotocabinet
 INCLUDES += $(ERL_DRIVER_H) /opt/local/kc/include
