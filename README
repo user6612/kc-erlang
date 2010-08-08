@@ -1,0 +1,24 @@
+KC-Erlang
+=========
+
+# prequisites
+
+KyotoCabinet
+http://fallabs.com/kyotocabinet/
+
+Erlang R14A
+http://erlang.org/
+
+OMake
+http://omake.metaprl.org/
+
+GCC (of course)
+
+# license
+GPL v3 for 'free' users. 'Non-free' users licensed by FAL Labs., can use this program with same linking exception as KyotoCabinet's commercial license.
+see draft v1. of license agreement of KyotoCabinet for detail:
+http://fallabs.com/mikio/tech/promenade.cgi?id=90 (in Japanese)
+
+# Copyright
+
+UENISHI Kota. find me (@kuenishi) in twitter.
