@@ -20,3 +20,6 @@
 -define(KC_INSERT_NEW, 18).
 
 -define(KC_GET, 101).
+
+% error codes from KC.
+-type reason() :: some.

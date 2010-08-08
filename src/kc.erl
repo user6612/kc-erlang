@@ -32,11 +32,13 @@ open(TableName, TableType) when is_atom(TableName), is_atom(TableType)->
 close(Pid)->
     gen_server:cast(Pid, stop).
 
-
+-spec set(Pid::pid(), binary(), binary())-> ok | {error, reason()}.
 set(Table, Key, Value) when is_binary(Key), is_binary(Value)->
     {ok, Port}=gen_server:call(Table, port),
-    erlang:port_call(Port, ?KC_SET, <<(byte_size(Key))/integer, Key/binary, 
-				      (byte_size(Value))/integer, Value/binary>>).
+    erlang:port_command(Port, <<?KC_SET/native,
+				(byte_size(Key)):64/native, Key/binary,
+				(byte_size(Value)):64/native, Value/binary>>),
+    receive Reply -> Reply end.
 
 add(_Table, Key, Value) when is_binary(Key), is_binary(Value)->
     not_yet.
@@ -53,12 +55,15 @@ incrdouble(_Table, Key, Value) when is_binary(Key), is_float(Value)->
 cas(_Table, Key, OldValue, NewValue) when is_binary(Key), is_binary(OldValue), is_binary(NewValue)->
     not_yet.
 
-remove(_Table, Key)->
+remove(_Table, Key) when is_binary(Key)->
     not_yet.
 
+-spec get(Pid::pid(), binary()) -> {ok, Value::binary()} | {error, reason()}.
 get(Table, Key) when is_binary(Key)->
     {ok, Port}=gen_server:call(Table, port),
-    erlang:port_call(Port, ?KC_SET, <<(byte_size(Key))/integer, Key/binary>>).
+    true=erlang:port_command(Port, <<?KC_GET/native, (byte_size(Key)):64/native, Key/binary>>),
+    receive Reply -> Reply end.
+    % Same as Port ! {self(), {command, Data}} except for the error behaviour
 
 clear(_Table)->
     not_yet.
@@ -66,9 +71,9 @@ clear(_Table)->
 sync(_Table)->
     not_yet.
 
-dumpsnap(_Table, Dest)->
+dumpsnap(_Table, Dest) when is_list(Dest)->
     not_yet.
-loadsnap(_Table, Src)->
+loadsnap(_Table, Src) when is_list(Src)->
     not_yet.
 
 count(_Table)->
